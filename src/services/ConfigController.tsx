@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Config } from "../models/IConfig";
 
-const API_CONFIG_URL = "https://localhost:44320/api/config/";
+const API_CONFIG_URL = "https://localhost:5001/api/config/";
 
 export class ConfigController {
 

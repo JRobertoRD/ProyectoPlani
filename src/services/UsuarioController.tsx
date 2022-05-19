@@ -1,5 +1,5 @@
 import { IUsuario } from '../models/IUsuario';
-
+//44320
 const API_USER_URL = "https://localhost:44320/api/usuario/";
 
 export function getAllusers() {

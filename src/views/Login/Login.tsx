@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import { CardUsuario } from '../authCard/CardUsuario';
 import { Alertas } from "../../components/Alertas/alertas";
 
+//44320
 const API_USER_URL = "https://localhost:44320/api/usuario/autenticar/";
 const alerta = new Alertas();
 
@@ -38,8 +39,9 @@ export function Login() {
 
 
   const onSubmit = (user: IUsuario, e:React.ChangeEvent<HTMLFormElement>) => {
-
+    
     if (user.contrasenia !== '' && user.nombre !== '') {
+      alerta.alertwaiting();
       const aux = API_USER_URL;
       fetch(aux, {
         method: "POST",
@@ -51,10 +53,12 @@ export function Login() {
         .then((result) => result.json())
         .then((user) => {
           if (user != null) {
+            alerta.alertWelcomeUser();
             navigate("/inicio");
           }
         });
       e.preventDefault();
+      alerta.alertFailLogin();
      // alertFail1();
    
     }else{
