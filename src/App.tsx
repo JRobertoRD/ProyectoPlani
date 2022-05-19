@@ -1,25 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+/*
+import Regsitro from './views/Registro/Registro';
+import Login from './views/Login/Login';
+import Inicio from './views/Inicio/Inicio';
+*/
+
+
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+import { useReducer } from 'react';
+import { AppRouter } from './router/AppRouter';
+
+
+
+const init = ()=>{
+
+  let sessionUser:any = sessionStorage.getItem('user'); 
+  let user:any;
+  if(!sessionUser){
+    user = sessionUser;
+  }else{
+    user = JSON.parse(sessionUser);
+  }
+  return user;
+}
+
 
 function App() {
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+
+    <AppRouter />
+
+
+    /*<Router>
+      <Routes>
+        <Route path='/' element={<Regsitro />} />
+        <Route path='/login' element={<Login />} /> 
+        <Route path='/inicio' element={<Inicio />} /> 
+      </Routes>
+    </Router>
+    */
+
   );
 }
 
