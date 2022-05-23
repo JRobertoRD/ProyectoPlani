@@ -10,6 +10,7 @@ import { Config, Id } from "../../models/IConfig";
 import { ConfigController } from "../../services/ConfigController";
 import { NavBar } from "../../components/NavBar/NavBar";
 import { Alertas } from "../../components/Alertas/alertas";
+import { Redirect } from "wouter";
 
 const alerta = new Alertas();
 export interface State {
@@ -53,6 +54,7 @@ export function AddConfig(){
 
     if(response){
       alerta.alertSuccessRegistro();
+       
       navigate("/inicio/showConfig")
     }
     clearInputs()

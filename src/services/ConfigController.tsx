@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Config } from "../models/IConfig";
 
-const API_CONFIG_URL = "https://localhost:5001/api/config/";
+const API_CONFIG_URL = "https://localhost:44320/api/config/";
 
 export class ConfigController {
 
@@ -11,11 +11,15 @@ export class ConfigController {
         .then((data) => console.log(data));
     }
     */
-    public getAllConfig() {
-        return axios.get(API_CONFIG_URL);
+    public async getAllConfig() {
+        return await axios.get(API_CONFIG_URL);
     }
-    public addConfig(conf:Config) {
-        return axios.post(API_CONFIG_URL, conf);
+    public async addConfig(conf:Config) {
+        return await axios.post(API_CONFIG_URL, conf);
+    }
+
+    public async deleteConfig(id:string) {
+        return await axios.delete(API_CONFIG_URL+id);
     }
 
 }
