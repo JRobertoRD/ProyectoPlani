@@ -20,6 +20,9 @@ export function NavBar(){
                     <li className="nav-item">
                         <a className="nav-link" href="/inicio/addConfig">Agregar Configuracion</a>
                     </li>
+                    <li className="nav-item">
+                        <a className="nav-link" href="/inicio/mempool">MemPool</a>
+                    </li>
                 </ul>
             </div>
         </nav>

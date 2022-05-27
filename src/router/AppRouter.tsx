@@ -5,6 +5,7 @@ import Inicio from '../views/Inicio/Inicio';
 import RegistroUsuairo from '../views/Registro/RegistroUsuario';
 import { AddConfig } from '../views/Config/AddConfig';
 import { ShowConfig } from "../views/Config/ShowConfig";
+import { MemPool } from "../components/MemPool/MemPool";
 
 
 interface Context {
@@ -35,6 +36,7 @@ export function AppRouter() {
                 <Route path="/registro" element={<RegistroUsuairo />} />
                 <Route path="/inicio/addConfig" element={<AddConfig />} />
                 <Route path="/inicio/showConfig" element={<ShowConfig />} />
+                <Route path="/inicio/mempool" element={<MemPool />} />
                 
 
                 <Route path="*" element={<Navigate to={"/Login"} />} />
