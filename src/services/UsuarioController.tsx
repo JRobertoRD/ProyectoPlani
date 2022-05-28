@@ -39,21 +39,3 @@ export function autenticar(user:IUsuario){
         }
       });
 }
-
-                                                  /* AXIOS */
-
-export async function addUser(data: IUsuario) {
-  return await axios.post(API_USER_URL, data);
-}
-
-export async function autenticar2(user:IUsuario){
-
-  try {
-    let response = (await (axios.post(API_USER_URL + "autenticar/", user))).data;
-    return response;
-  } catch (e) {
-    console.log(e);
-  }
- 
-
-}
