@@ -1,18 +1,17 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthCard } from "../authCard/AuthCard";
 
 
 import accountIcon from '../../assets/icons/user.png';
 import passwordIcon from '../../assets/icons/password.png';
 import logo from '../../assets/img/logo.svg';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Config, Id } from "../../models/IConfig";
-import { ConfigController } from "../../services/ConfigController";
-import { NavBar } from "../../components/NavBar/NavBar";
 import { Alertas } from "../../components/Alertas/alertas";
-import { Redirect } from "wouter";
+import { addConfig } from "../../services/ConfigController";
 
 const alerta = new Alertas();
+
 export interface State {
   modalId: string;
   reload?: any
@@ -46,11 +45,11 @@ export function AddConfig(){
   }
 
   async function handleSubmitSave() {
-    const api = new ConfigController()
+    
     let response: any;
 
-    response = (await api.addConfig(config)).data
-    console.log(response)
+    response =  addConfig(config);
+    console.log(response.data)
 
     if(response){
       alerta.alertSuccessRegistro();

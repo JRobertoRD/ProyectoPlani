@@ -1,9 +1,7 @@
-import { appendFile } from "fs";
-import { useEffect, useState, MouseEvent } from "react";
+import { useEffect, useState } from "react";
 import { Config } from "../../models/IConfig";
-import { ConfigController } from '../../services/ConfigController';
-import { AuthCard } from "../authCard/AuthCard";
 import { CardConfig } from '../authCard/CardConfig';
+import { getAllConfig } from "../../services/ConfigController";
 
 export interface State {
     listConfig: Config[]
@@ -19,8 +17,8 @@ export function ShowConfig() {
     }, []);
 
     const getConfig = async () => {
-        const api = new ConfigController();
-        const response = (await api.getAllConfig()).data
+       // const api = new ConfigController();
+        const response = (await getAllConfig()).data
         setState({ listConfig: response });
 
     };
@@ -46,3 +44,4 @@ export function ShowConfig() {
         </CardConfig>
     );
 }
+

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { IUsuario } from '../models/IUsuario';
 //44320
 const API_USER_URL = "https://localhost:44320/api/usuario/";
@@ -21,6 +22,7 @@ export function insertUser(data: IUsuario) {
     .then((data) => console.log(data));
 }
 
+
 export function autenticar(user:IUsuario){
 
     fetch(API_USER_URL + user.nombre + "/" + user.contrasenia, {
@@ -36,4 +38,22 @@ export function autenticar(user:IUsuario){
           return user;
         }
       });
+}
+
+                                                  /* AXIOS */
+
+export async function addUser(data: IUsuario) {
+  return await axios.post(API_USER_URL, data);
+}
+
+export async function autenticar2(user:IUsuario){
+
+  try {
+    let response = (await (axios.post(API_USER_URL + "autenticar/", user))).data;
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+ 
+
 }

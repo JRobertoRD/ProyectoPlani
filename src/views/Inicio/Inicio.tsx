@@ -1,5 +1,4 @@
 import React from "react";
-import FormLogin from '../../components/LoginUsuario/FormLogin';
 import { NavBar } from '../../components/NavBar/NavBar';
 import { AuthCard } from "../authCard/AuthCard";
 //import { NavBar } from "../../components/NavBar/navbar";
