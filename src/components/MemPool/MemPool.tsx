@@ -21,14 +21,21 @@ export function MemPool() {
     const getMemPool = async () => {
         const api = new MemPoolController();
         const response = (await api.getMemPool()).data
-        console.log(response);
         setState({ listMemPool: response });
     };
+
+    function deleteFile(id:any){
+
+    }
+
+    function downloadFile(id:any){
+
+    }
 
     return (
 
         <CardMemPool>
-            <div>
+            <div className="container">
                 <a href="/inicio/mempool/add">
                     <button type="button" className="btn btn-success">Agregar</button>
                 </a>
@@ -45,15 +52,19 @@ export function MemPool() {
                     </thead>
                     <tbody>
                         {state.listMemPool.map((item: any) => (
-                            <tr key={item._id}>
+                            <tr key={item.id}>
                                 <td>{item.id.increment}</td>
                                 <td>{item.owner}</td>
                                 <td>{item.extension}</td>
                                 <td>{item.create}</td>
                                 <td>{item.size}</td>
                                 <td>
-                                    <a href="" className="btn btn-danger">Eliminar</a>
-                                    <a href="" className="btn btn-info">Descargar</a>
+                                    <button type="submit" className="btn btn-danger" onClick={deleteFile}>
+                                        Eliminar
+                                    </button>
+                                    <button type="submit" className="btn btn-info" onClick={downloadFile}>
+                                        Descargar
+                                    </button>
                                 </td>
                             </tr>
                         ))}
