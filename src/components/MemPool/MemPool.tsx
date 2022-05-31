@@ -9,7 +9,7 @@ export interface State {
 }
 
 export function MemPool() {
-    
+
     const [state, setState] = useState<State>({
         listMemPool: []
     });
@@ -27,36 +27,36 @@ export function MemPool() {
     };
 
     return (
-        
+
         <CardMemPool>
-            <div>Hola</div>
-        </CardMemPool>
-        /*
-        <CardMemPool>
-            
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Owner</th>
-                        <th scope="col">Extension</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Size</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {state.listMemPool.map((item: any) => (
-                        <tr key={item.id}>
-                            <td>{item.owner}</td>
-                            <td>{item.extension}</td>
-                            <td>{item.create}</td>
-                            <td>{item.size}</td>
-                            <td>Elimianar y descargar</td>
+            <div>
+                <a href="/inicio/mempool/add">
+                    <button type="button" className="btn btn-success">Agregar</button>
+                </a>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Owner</th>
+                            <th scope="col">Extension</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Size</th>
+                            <th scope="col">Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-        </CardMemPool>*/
+                    </thead>
+                    <tbody>
+                        {state.listMemPool.map((item: any) => (
+                            <tr key={item.id}>
+                                <td>{item.owner}</td>
+                                <td>{item.extension}</td>
+                                <td>{item.create}</td>
+                                <td>{item.size}</td>
+                                <td>Elimianar y descargar</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </CardMemPool>
     );
 }
