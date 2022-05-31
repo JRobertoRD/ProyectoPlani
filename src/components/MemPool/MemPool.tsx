@@ -22,8 +22,7 @@ export function MemPool() {
         const api = new MemPoolController();
         const response = (await api.getMemPool()).data
         console.log(response);
-        //setState({ listMemPool: response });
-
+        setState({ listMemPool: response });
     };
 
     return (
@@ -46,12 +45,16 @@ export function MemPool() {
                     </thead>
                     <tbody>
                         {state.listMemPool.map((item: any) => (
-                            <tr key={item.id}>
+                            <tr key={item._id}>
+                                <td>{item.id.increment}</td>
                                 <td>{item.owner}</td>
                                 <td>{item.extension}</td>
                                 <td>{item.create}</td>
                                 <td>{item.size}</td>
-                                <td>Elimianar y descargar</td>
+                                <td>
+                                    <a href="" className="btn btn-danger">Eliminar</a>
+                                    <a href="" className="btn btn-info">Descargar</a>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

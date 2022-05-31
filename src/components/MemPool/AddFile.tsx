@@ -4,7 +4,7 @@ import { AuthCard } from "../../views/authCard/AuthCard";
 import { useState } from "react";
 import { IFile, Id } from "../../models/IFile";
 import { Alertas } from "../../components/Alertas/alertas";
-import { addConfig } from "../../services/ConfigController";
+import { MemPoolController } from "../../services/MemPoolController";
 
 const alerta = new Alertas();
 
@@ -26,67 +26,61 @@ export function AddFile() {
         creationTime: ''
     }
 
-    const [file, setFile] = useState<IFile>({
-        id: id,
-        owner: '',
-        extension:'',
-        create: new Date(),
-        size: 0,
-        base64:''
-      })
-
     let fileList: IFile[];
 
     const onChange = (e) => {
+        fileList = new Array<IFile>();
         Array.from(e.target.files).forEach(file => {
-            setFileData('id', id);
-            setFileData('owner', '');
-            setFileData('extension', getFileExtension(file['name']));
-            setFileData('create', new Date());
-            setFileData('size', getFileExtension(file['size']));
-            setFileData('base64', '');
-            console.log('----------------');
+            let fileNew: IFile ={
+                id: id,
+                owner: '',
+                extension:'',
+                create: new Date(),
+                size: 0,
+                base64:''
+            };
+            fileNew.id = id
+            fileNew.owner = 'Yo'
+            fileNew.extension = file['type']
+            fileNew.size= file['size']
+            encodeBase64(file, fileNew);
+            fileList.push(fileNew);
         });
     };
-    function setFileData(name: string, value: any) {
-        setFile({
-          ...file,
-          [name]: value
-        })
-      }
-    function getFileExtension(filename:string) {
-        console.log(filename.lastIndexOf("."));
-        return filename.lastIndexOf(".");
+
+    function encodeBase64(file:any, fileNew:IFile){
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            fileNew.base64 = reader.result.toString();
+        };
     }
 
     async function handleSubmitSave() {
-
-        let response: any;
-        /*
-        response = addConfig(config);
-        console.log(response.data)
-
-        if (response) {
-            alerta.alertSuccessRegistro();
-
-            navigate("/inicio/showConfig")
+        if(fileList != null){
+            let response: any;
+            alerta.alertwaiting();
+            const api = new MemPoolController();
+            response = await api.addToMemPool(fileList);
+            if (response) {
+                alerta.alert('Exitoso', 'Archivos Gardados', 'success', 3000);
+    
+                navigate("/inicio/mempool")
+            }else{
+                alerta.alert('Error!', 'Intente nuevamente!!', 'error', 3000);
+            }
+        }else{
+            alerta.alert('Error!', 'Seleccione archivo(s) primero', 'error', 3000);
         }
-        clearInputs()
-        */
         //reload()
     }
-
-    function clearInputs() {
-
-    }
-
 
     return (
 
 
         <AuthCard>
-
-            <form autoComplete="off" id="registroForm">
+            <div>
+            
                 <div className="mt-3 mb-3 text-center">
                     <h6>Agregar Archivo(s)</h6>
                 </div>
@@ -113,8 +107,8 @@ export function AddFile() {
                     </button>
                 </div>
 
-
-            </form>
+                </div>
+            
         </AuthCard>
 
 
