@@ -2,7 +2,7 @@ import axios from "axios";
 import { Config } from "../models/IConfig";
 
 
-import { GET_MEMPOOL, ADD_MEMPOOL, DELETE_MEMPOOL } from '../assets/API/ApiLinks'
+import { GET_MEMPOOL, ADD_MEMPOOL, DELETE_MEMPOOL, GET_FILE_MEMPOOL } from '../assets/API/ApiLinks'
 import { IFile } from "../models/IFile";
 
 export class MemPoolController {
@@ -20,6 +20,10 @@ export class MemPoolController {
 
     public async deleteFromMemPool(id: string) {
         return await axios.delete(DELETE_MEMPOOL + id);
+    }
+
+    public async downloadFile(id: string){
+        return await axios.get(GET_FILE_MEMPOOL + id);
     }
 
 }

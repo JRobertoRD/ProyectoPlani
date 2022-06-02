@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthCard } from "../../views/authCard/AuthCard";
 
 import { useState } from "react";
-import { IFile, Id } from "../../models/IFile";
+import { IFile, _Id } from "../../models/IFile";
 import { Alertas } from "../../components/Alertas/alertas";
 import { MemPoolController } from "../../services/MemPoolController";
 
@@ -17,30 +17,32 @@ export interface State {
 export function AddFile() {
 
     const navigate = useNavigate();
-
-    const id: Id = {
+/*
+    const _id: _Id = {
         timestamp: 0,
         machine: 0,
         pid: 0,
         increment: 0,
         creationTime: ''
     }
-
+*/
     let fileList: IFile[];
 
     const onChange = (e) => {
         fileList = new Array<IFile>();
         Array.from(e.target.files).forEach(file => {
             let fileNew: IFile ={
-                id: id,
+                _id: null,
                 owner: '',
+                name: '',
                 extension:'',
                 create: new Date(),
                 size: 0,
                 base64:''
             };
-            fileNew.id = id
+            //fileNew._id = _id
             fileNew.owner = 'Yo'
+            fileNew.name = file['name']
             fileNew.extension = file['type']
             fileNew.size= file['size']
             encodeBase64(file, fileNew);

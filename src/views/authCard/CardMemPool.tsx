@@ -12,8 +12,8 @@ export function CardMemPool(props:Props){
             <NavBar></NavBar>
         </div><div className="container mt-4rem mycontainer">
                 <div className="d-flex justify-content-center">
-                    <div className="col-md-4 col-10">
-                        <div className="shadow-sm rounded p-3">
+                    <div className="col-md-10 col-10">
+                        <div className="shadow-sm rounded p-5">
                             <div className="row">
                                 <div>
                                     <div className="col-xl-12 col-md-12">

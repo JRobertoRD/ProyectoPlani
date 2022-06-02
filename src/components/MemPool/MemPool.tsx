@@ -1,14 +1,20 @@
+import { appendFile } from "fs";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState, MouseEvent } from "react";
-import { useLocation } from "wouter";
-import { Id, IFile } from '../../models/IFile';
+import { _Id, IFile } from '../../models/IFile';
 import { MemPoolController } from "../../services/MemPoolController";
 import { CardMemPool } from "../../views/authCard/CardMemPool";
+import { Alertas } from "../Alertas/alertas";
 
+
+const alerta = new Alertas();
 export interface State {
     listMemPool: IFile[]
 }
 
 export function MemPool() {
+
+    const navigate = useNavigate();
 
     const [state, setState] = useState<State>({
         listMemPool: []
@@ -16,7 +22,7 @@ export function MemPool() {
 
     useEffect(() => {
         getMemPool()
-    }, []);
+    }, [state]);
 
     const getMemPool = async () => {
         const api = new MemPoolController();
@@ -24,13 +30,32 @@ export function MemPool() {
         setState({ listMemPool: response });
     };
 
-    function deleteFile(id:any){
+    async function deleteFile(id:string){
+        const api = new MemPoolController();
+        alerta.alertwaiting();
+        const response = await api.deleteFromMemPool(id);
+        if(response){
+            alerta.alert('Exitoso', 'Archivos Gardados', 'success', 3000);
+    
+            navigate("/inicio/mempool")
+        }else{
+            alerta.alert('Error!', 'Intente nuevamente!!', 'error', 3000)
+        }
 
     }
 
-    function downloadFile(id:any){
-
+    async function downloadFile(base64:any, name: string){
+        var fileDownload = require('js-file-download');
+        const byteString = window.atob(base64.split(",")[1]);
+        const arrayBuffer = new ArrayBuffer(byteString.length);
+        const int8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < byteString.length; i++) {
+            int8Array[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([int8Array], { type: name.split(".")[1] });
+        fileDownload(blob, name);
     }
+    
 
     return (
 
@@ -44,6 +69,7 @@ export function MemPool() {
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Owner</th>
+                            <th scope="col">Name</th>
                             <th scope="col">Extension</th>
                             <th scope="col">Date</th>
                             <th scope="col">Size</th>
@@ -52,17 +78,18 @@ export function MemPool() {
                     </thead>
                     <tbody>
                         {state.listMemPool.map((item: any) => (
-                            <tr key={item.id}>
-                                <td>{item.id.increment}</td>
+                            <tr key={item._Id}>
+                                <td>{item._Id}</td>
                                 <td>{item.owner}</td>
+                                <td>{item.name}</td>
                                 <td>{item.extension}</td>
                                 <td>{item.create}</td>
                                 <td>{item.size}</td>
                                 <td>
-                                    <button type="submit" className="btn btn-danger" onClick={deleteFile}>
+                                    <button type="submit" className="btn btn-danger" onClick= {() =>{deleteFile(item._Id);}}>
                                         Eliminar
                                     </button>
-                                    <button type="submit" className="btn btn-info" onClick={downloadFile}>
+                                    <button type="submit" className="btn btn-info" onClick= {() =>{downloadFile(item.base64, item.name);}}>
                                         Descargar
                                     </button>
                                 </td>

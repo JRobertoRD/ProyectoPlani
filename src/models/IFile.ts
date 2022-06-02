@@ -1,13 +1,14 @@
 export interface IFile {
-    id?: Id
+    _id?: any
     owner: string
+    name:string
     extension: string
     create: Date
     size: number
     base64: string
   }
   
-  export interface Id {
+  export interface _Id {
     timestamp: number
     machine: number
     pid: number
