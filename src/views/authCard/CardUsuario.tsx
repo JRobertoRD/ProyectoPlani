@@ -8,7 +8,9 @@ interface Props{
 export function CardUsuario(props:Props){
 
     return(
-        <><div className="form-container">
+        <>
+        
+        <div className="form-container">
         </div><div className="container mt-4rem mycontainer">
                 <div className="d-flex justify-content-center">
                     <div className="col-md-4 col-10">

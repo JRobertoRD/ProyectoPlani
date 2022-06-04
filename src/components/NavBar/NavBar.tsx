@@ -1,4 +1,9 @@
-export function NavBar(){
+import { ReactElement } from "react";
+
+interface Props{
+    children?:ReactElement
+}
+export function NavBar(props:Props){
 
 
 
@@ -25,6 +30,10 @@ export function NavBar(){
                     </li>
                 </ul>
             </div>
+            <span className="navbar-text">
+                {props.children}
+            </span>
+
         </nav>
 
     );

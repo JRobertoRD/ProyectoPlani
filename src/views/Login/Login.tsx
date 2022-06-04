@@ -11,6 +11,8 @@ import { CardUsuario } from '../authCard/CardUsuario';
 import { Alertas } from "../../components/Alertas/alertas";
 import { AUTENTICAR_USER } from "../../assets/API/ApiLinks";
 
+import { NavBar } from "../../components/NavBar/NavBar";
+
 
 //44320
 
@@ -34,13 +36,13 @@ export function Login() {
     contrasenia: "",
   });
 
-  const { register, handleSubmit }: any = useForm();
+  const {handleSubmit }: any = useForm();
 
 
-  const onSubmit = (user: IUsuario, e:React.ChangeEvent<HTMLFormElement>) => {
+  const onSubmit = (e:React.ChangeEvent<HTMLFormElement>) => {
     
     if (user.contrasenia !== '' && user.nombre !== '') {
-      alerta.alertwaiting();
+      //alerta.alertwaiting();
       fetch(AUTENTICAR_USER, {
         method: "POST",
         body: JSON.stringify(user),
@@ -52,22 +54,32 @@ export function Login() {
         .then((user) => {
           if (user != null) {
             alerta.alertWelcomeUser();
+            sessionStorage.setItem('userName', user.nombre);
+            let userName = sessionStorage.getItem('userName');
+            console.log(`Hola, mi nombre es ${userName}`);
             navigate("/inicio");
           }
         });
       e.preventDefault();
       alerta.alertFailLogin();
-     // alertFail1();
    
     }else{
-      //alertFileRegistro();
       alerta.alertFailRegistro();
     }
     
   };
+  function handleChangeInput(name: string, e: React.ChangeEvent<HTMLInputElement>) {
+    setUser({
+      ...user,
+      [name]: e.target.value
+    })
+  }
+
 
   return (
+    
     <CardUsuario>
+      
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className="text-center mb-2">
           <img
@@ -89,8 +101,9 @@ export function Login() {
             className="form-control txt-input"
             type="text"
             name="nombre"
-            placeholder="Elon"
-            {...register("nombre")}
+            placeholder="User Name"
+            onChange={(e) => handleChangeInput('nombre', e)}
+            value={user?.nombre}
           />
         </div>
 
@@ -105,8 +118,9 @@ export function Login() {
             className="form-control txt-input"
             type="password"
             name="contrasenia"
-            placeholder="Elon"
-            {...register("contrasenia")}
+            placeholder="*******"
+            onChange={(e) => handleChangeInput('contrasenia', e)}
+            value={user?.contrasenia}
           />
         </div>
 
@@ -131,7 +145,7 @@ export function Login() {
         </div>
 
         <div className="mt-3 mb-3 text-center">
-          <Link to="/auth/recover">Forgot Password?</Link>
+          <Link to="">Forgot Password?</Link>
         </div>
 
         <div className="mt-3 mb-3 text-center">
