@@ -10,7 +10,7 @@ import logo from '../../assets/img/logo.svg';
 import {Link} from 'react-router-dom'
 
 import Swal from "sweetalert2";
-import { Alertas } from "../../components/Alertas/alertas";
+import { Alertas } from "../../assets/Alertas/alertas";
 
 
 function RegistroUsuairo() {

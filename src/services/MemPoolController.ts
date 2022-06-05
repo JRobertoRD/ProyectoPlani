@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Config } from "../models/IConfig";
 
 
 import { GET_MEMPOOL, ADD_MEMPOOL, DELETE_MEMPOOL, GET_FILE_MEMPOOL } from '../assets/API/ApiLinks'
@@ -9,6 +8,10 @@ export class MemPoolController {
 
     public async getMemPool() {
         return await axios.get(GET_MEMPOOL);
+    }
+
+    public async getMemPoolFilter(owner:string) {
+        return await axios.get(GET_MEMPOOL+owner);
     }
 
     public async addToMemPool(listFiles: IFile[]) {

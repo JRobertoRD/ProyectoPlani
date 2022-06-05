@@ -8,10 +8,10 @@ import {Link, useNavigate} from 'react-router-dom'
 import { Id, IUsuario } from "../../models/IUsuario";
 import { useForm } from "react-hook-form";
 import { CardUsuario } from '../authCard/CardUsuario';
-import { Alertas } from "../../components/Alertas/alertas";
+import { Alertas } from "../../assets/Alertas/alertas";
 import { AUTENTICAR_USER } from "../../assets/API/ApiLinks";
 
-import { NavBar } from "../../components/NavBar/NavBar";
+//import { NavBar } from "../../components/NavBar/NavBar";
 
 
 //44320

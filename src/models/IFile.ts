@@ -7,11 +7,3 @@ export interface IFile {
     size: number
     base64: string
   }
-  
-  export interface _Id {
-    timestamp: number
-    machine: number
-    pid: number
-    increment: number
-    creationTime: string
-  }

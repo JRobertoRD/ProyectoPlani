@@ -1,13 +1,15 @@
-import { appendFile } from "fs";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState, MouseEvent } from "react";
-import { _Id, IFile } from '../../models/IFile';
+import { useEffect, useState } from "react";
+
+import { IFile } from '../../models/IFile';
 import { MemPoolController } from "../../services/MemPoolController";
 import { CardMemPool } from "../../views/authCard/CardMemPool";
-import { Alertas } from "../Alertas/alertas";
+import { Alertas } from "../../assets/Alertas/alertas";
+import { SessionStorage } from "../../assets/SessionStorage/sessionStorage";
 
 
 const alerta = new Alertas();
+const session = new SessionStorage();
 export interface State {
     listMemPool: IFile[]
 }
@@ -21,12 +23,16 @@ export function MemPool() {
     });
 
     useEffect(() => {
-        getMemPool()
+        if(session.getData('userName') != null){
+            getMemPool();
+        }else{
+            navigate("/Login")
+        }
     }, [state]);
 
-    const getMemPool = async () => {
+    async function getMemPool(){
         const api = new MemPoolController();
-        const response = (await api.getMemPool()).data
+        const response = (await api.getMemPoolFilter(session.getData("userName"))).data
         setState({ listMemPool: response });
     };
 

@@ -7,7 +7,7 @@ import passwordIcon from '../../assets/icons/password.png';
 import logo from '../../assets/img/logo.svg';
 import { useState } from "react";
 import { Config, Id } from "../../models/IConfig";
-import { Alertas } from "../../components/Alertas/alertas";
+import { Alertas } from "../../assets/Alertas/alertas";
 import { addConfig } from "../../services/ConfigController";
 
 const alerta = new Alertas();

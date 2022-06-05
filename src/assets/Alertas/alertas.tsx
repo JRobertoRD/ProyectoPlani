@@ -38,6 +38,15 @@ export class Alertas {
         })
     }
 
+    public alertBotton(titleD:string, textD:string, iconD:any){
+        Swal.fire({
+            title: titleD,
+            text: textD,
+            icon: iconD,
+            showConfirmButton: true,
+        })
+    }
+
     public alertwaiting() {
 
         Swal.fire({
