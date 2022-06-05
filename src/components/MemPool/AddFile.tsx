@@ -5,8 +5,12 @@ import { useState } from "react";
 import { IFile, _Id } from "../../models/IFile";
 import { Alertas } from "../../components/Alertas/alertas";
 import { MemPoolController } from "../../services/MemPoolController";
+import { SessionStorage } from "../../assets/SessionStorage/sessionStorage"
+import { DateFormat } from "../../assets/Date/DateFormat"
 
 const alerta = new Alertas();
+const session = new SessionStorage();
+const date = new DateFormat();
 
 export interface State {
     modalId: string;
@@ -17,15 +21,6 @@ export interface State {
 export function AddFile() {
 
     const navigate = useNavigate();
-/*
-    const _id: _Id = {
-        timestamp: 0,
-        machine: 0,
-        pid: 0,
-        increment: 0,
-        creationTime: ''
-    }
-*/
     let fileList: IFile[];
 
     const onChange = (e) => {
@@ -33,18 +28,13 @@ export function AddFile() {
         Array.from(e.target.files).forEach(file => {
             let fileNew: IFile ={
                 _id: null,
-                owner: '',
-                name: '',
-                extension:'',
-                create: new Date(),
-                size: 0,
+                owner: session.getData("userName"),
+                name: file['name'].split(".")[0],
+                extension: file['name'].split(".")[1],
+                create: date.getDateWithFormat(),
+                size: file['size'],
                 base64:''
             };
-            //fileNew._id = _id
-            fileNew.owner = 'Yo'
-            fileNew.name = file['name']
-            fileNew.extension = file['type']
-            fileNew.size= file['size']
             encodeBase64(file, fileNew);
             fileList.push(fileNew);
         });

@@ -3,7 +3,7 @@ export interface IFile {
     owner: string
     name:string
     extension: string
-    create: Date
+    create: string
     size: number
     base64: string
   }

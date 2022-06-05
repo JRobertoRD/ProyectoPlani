@@ -44,7 +44,7 @@ export function MemPool() {
 
     }
 
-    async function downloadFile(base64:any, name: string){
+    async function downloadFile(base64:any, name: string, extension: string){
         var fileDownload = require('js-file-download');
         const byteString = window.atob(base64.split(",")[1]);
         const arrayBuffer = new ArrayBuffer(byteString.length);
@@ -52,7 +52,7 @@ export function MemPool() {
         for (let i = 0; i < byteString.length; i++) {
             int8Array[i] = byteString.charCodeAt(i);
         }
-        const blob = new Blob([int8Array], { type: name.split(".")[1] });
+        const blob = new Blob([int8Array], { type: extension });
         fileDownload(blob, name);
     }
     
@@ -89,7 +89,7 @@ export function MemPool() {
                                     <button type="submit" className="btn btn-danger" onClick= {() =>{deleteFile(item._Id);}}>
                                         Eliminar
                                     </button>
-                                    <button type="submit" className="btn btn-info" onClick= {() =>{downloadFile(item.base64, item.name);}}>
+                                    <button type="submit" className="btn btn-info" onClick= {() =>{downloadFile(item.base64, item.name, item.extension);}}>
                                         Descargar
                                     </button>
                                 </td>
