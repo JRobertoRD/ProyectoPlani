@@ -1,67 +1,132 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { IFile } from '../../models/IFile';
 import { MemPoolController } from "../../services/MemPoolController";
 import { CardMemPool } from "../../views/authCard/CardMemPool";
 import { Alertas } from "../../assets/Alertas/alertas";
 import { SessionStorage } from "../../assets/SessionStorage/sessionStorage";
+import { NAME_COMPRESSED, EXTENSION_COMPRESSED } from "../../assets/Download/Download"
 
 
 const alerta = new Alertas();
 const session = new SessionStorage();
 export interface State {
-    listMemPool: IFile[]
+    listMemPool: IFile[],
 }
 
 export function MemPool() {
 
+    let fileListMasive = useRef(new Array<IFile>());
     const navigate = useNavigate();
 
     const [state, setState] = useState<State>({
         listMemPool: []
     });
 
+    const [enable, setDisable] = useState(true);
+
     useEffect(() => {
-        if(session.getData('userName') != null){
+        if (session.getData('userName') != null) {
             getMemPool();
-        }else{
+        } else {
             navigate("/Login")
         }
     }, [state]);
 
-    async function getMemPool(){
+    async function getMemPool() {
         const api = new MemPoolController();
         const response = (await api.getMemPoolFilter(session.getData("userName"))).data
         setState({ listMemPool: response });
     };
 
-    async function deleteFile(id:string){
+    async function deleteFile(id: string) {
         const api = new MemPoolController();
         alerta.alertwaiting();
         const response = await api.deleteFromMemPool(id);
-        if(response){
+        if (response) {
             alerta.alert('Exitoso', 'Archivos Gardados', 'success', 3000);
-    
+            setDisable(true);
             navigate("/inicio/mempool")
-        }else{
+        } else {
             alerta.alert('Error!', 'Intente nuevamente!!', 'error', 3000)
         }
-
     }
 
-    async function downloadFile(base64:any, name: string, extension: string){
+    async function downloadFile(base64: string, name: string, extension: string) {
         var fileDownload = require('js-file-download');
-        const byteString = window.atob(base64.split(",")[1]);
+        let blob = convertStringToBlob(base64.split(",")[1], extension)
+        fileDownload(blob, name+'.'+extension);
+    }
+
+    function convertStringToBlob(content:string, extension:string){
+        const byteString = window.atob(content);
         const arrayBuffer = new ArrayBuffer(byteString.length);
         const int8Array = new Uint8Array(arrayBuffer);
         for (let i = 0; i < byteString.length; i++) {
             int8Array[i] = byteString.charCodeAt(i);
         }
-        const blob = new Blob([int8Array], { type: extension });
-        fileDownload(blob, name);
+        return new Blob([int8Array], { type: extension });
     }
-    
+
+    const masiveActionsOnChange = (e) => {
+        if (e.target.checked) {
+            let datos = e.target.name.split('*');
+            let file: IFile = {
+                _id: datos[0],
+                owner: '',
+                name: datos[1],
+                extension: datos[2],
+                create: '',
+                size: 0,
+                base64: datos[3]
+            };
+            fileListMasive.current.push(file);
+        } else {
+            filteredFileListMasive(fileListMasive.current, e.target.name.split('.')[0]);
+        }
+        enableButtons(fileListMasive.current);
+    };
+
+    function filteredFileListMasive(fileList: IFile[], id: string) {
+        const fileListFiltered = fileList.filter(file => file._id !== id);
+        fileListMasive.current = fileListFiltered;
+    }
+
+    function enableButtons(fileList: IFile[]) {
+        if (fileList.length > 0) {
+            setDisable(false);
+        } else {
+            setDisable(true);
+        }
+    }
+
+    function downloadMavise() {
+        var zipDependicie = require('jszip');
+        var saveAs = require('file-saver')
+        var zip = new zipDependicie();
+        for (let fileItem of fileListMasive.current) {
+            console.log(fileItem);
+            let file = new File( [convertStringToBlob(fileItem.base64.split(',')[1], fileItem.extension)], fileItem.name, null);
+            zip.file(fileItem.name + '.' + fileItem.extension, file);
+        }
+        zip.generateAsync({type: "blob"}).then(content => {
+            saveAs(content, NAME_COMPRESSED + '.' + EXTENSION_COMPRESSED);
+        });
+    }
+
+    async function deleteMavise() {
+        const api = new MemPoolController();
+        alerta.alertwaiting();
+        const response = await api.deleteMasiveFromMemPool(fileListMasive.current);
+        if (response) {
+            alerta.alert('Exitoso', 'Archivos Eliminados', 'success', 3000);
+            setDisable(true);
+            navigate("/inicio/mempool")
+        } else {
+            alerta.alert('Error!', 'Intente nuevamente!!', 'error', 3000)
+        }
+    }
 
     return (
 
@@ -70,9 +135,12 @@ export function MemPool() {
                 <a href="/inicio/mempool/add">
                     <button type="button" className="btn btn-success">Agregar</button>
                 </a>
+                <button type="button" hidden={enable} className="btn btn-danger" onClick={deleteMavise}>Delete Files</button>
+                <button type="button" hidden={enable} className="btn btn-info" onClick={downloadMavise}>Download Files</button>
                 <table className="table">
                     <thead>
                         <tr>
+                            <th scope="col">Masive</th>
                             <th scope="col">Id</th>
                             <th scope="col">Owner</th>
                             <th scope="col">Name</th>
@@ -85,6 +153,11 @@ export function MemPool() {
                     <tbody>
                         {state.listMemPool.map((item: any) => (
                             <tr key={item._Id}>
+                                <td>
+                                    <div className="form-check form-switch">
+                                        <input className="form-check-input" name={item._Id + "*" + item.name + "*" + item.extension + "*" + item.base64} itemID={item._Id} onChangeCapture={masiveActionsOnChange} type="checkbox" id="flexSwitchCheckDefault" />
+                                    </div>
+                                </td>
                                 <td>{item._Id}</td>
                                 <td>{item.owner}</td>
                                 <td>{item.name}</td>
@@ -92,10 +165,10 @@ export function MemPool() {
                                 <td>{item.create}</td>
                                 <td>{item.size}</td>
                                 <td>
-                                    <button type="submit" className="btn btn-danger" onClick= {() =>{deleteFile(item._Id);}}>
+                                    <button type="submit" className="btn btn-danger" onClick={() => { deleteFile(item._Id); }}>
                                         Eliminar
                                     </button>
-                                    <button type="submit" className="btn btn-info" onClick= {() =>{downloadFile(item.base64, item.name, item.extension);}}>
+                                    <button type="submit" className="btn btn-info" onClick={() => { downloadFile(item.base64, item.name, item.extension); }}>
                                         Descargar
                                     </button>
                                 </td>

@@ -52,7 +52,9 @@ export function AddFile() {
                 invalidExtension = true;
             }
         });
-        alerta.alertBotton('Error!', 'Extensiones de documento permitidas:\n' + validations.getExtensionsValid(), 'error');
+        if(invalidExtension){
+            alerta.alertBotton('Error!', 'Extensiones de documento permitidas:\n' + validations.getExtensionsValid(), 'error');
+        }
     };
 
     function encodeBase64(file: any, fileNew: IFile) {

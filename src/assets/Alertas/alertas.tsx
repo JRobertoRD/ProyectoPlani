@@ -54,6 +54,7 @@ export class Alertas {
             html: 'Ejecutando orden',
             allowOutsideClick: false,
             allowEscapeKey: false,
+            showConfirmButton: false,
             didOpen: () => {
                 Swal.showLoading()
             },

@@ -1,5 +1,5 @@
 export class Validations {
-    extensionsValid: string[] = ["txt", "docx", "xlsx", "pptx", "pdf", "jpg", "npg"];
+    extensionsValid: string[] = ["txt", "docx", "xlsx", "pptx", "pdf", "jpg", "png"];
 
     validateExtension(extension:string) {
         for (let ext of this.extensionsValid) { 

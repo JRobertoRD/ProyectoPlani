@@ -29,4 +29,12 @@ export class MemPoolController {
         return await axios.get(GET_FILE_MEMPOOL + id);
     }
 
+    public async deleteMasiveFromMemPool(listFiles: IFile[]){
+        console.log(listFiles);
+        for(let file of listFiles){ 
+            await this.deleteFromMemPool(file._id)
+        }
+        return true;
+    }
+
 }
