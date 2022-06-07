@@ -24,7 +24,6 @@ export function AddFile() {
 
     const navigate = useNavigate();
     let fileList: IFile[];
-    let invalidExtension = false;
     const [state, setState] = useState<State>();
 
     useEffect(() => {
@@ -34,6 +33,7 @@ export function AddFile() {
     }, [state]);
 
     const onChange = (e) => {
+        let invalidExtension = false;
         fileList = new Array<IFile>();
         Array.from(e.target.files).forEach(file => {
             if (validations.validateExtension(file['name'].split(".")[1])) {
