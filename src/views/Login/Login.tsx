@@ -11,7 +11,6 @@ import { CardUsuario } from '../authCard/CardUsuario';
 import { Alertas } from "../../assets/Alertas/alertas";
 import { AUTENTICAR_USER } from "../../assets/API/ApiLinks";
 
-//import { NavBar } from "../../components/NavBar/NavBar";
 
 
 //44320

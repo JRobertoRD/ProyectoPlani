@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Login } from "../views/Login/Login";
 import Inicio from '../views/Inicio/Inicio';
@@ -9,31 +8,22 @@ import { MemPool } from "../components/MemPool/MemPool";
 import { AddFile } from "../components/MemPool/AddFile";
 
 
-interface Context {
-    dispatchUser?: any,
-    user?: User
-}
-
-interface User {
-    loggedIn: boolean
-}
-
 export function AppRouter() {
+    
+
+    let user = sessionStorage.getItem('userName');
+
+
 
 
     return (
 
-        /*  
-          <Router>
-             <AuthRouter />
-  
-          </Router>
-          */
 
         <Router>
             <Routes>
+                
                 <Route path="/Login" element={<Login />} />
-                <Route path="/inicio" element={<Inicio />} />
+                <Route path="/inicio" element={ user == null ? (<Navigate to="/Login"/>): (<Inicio />) } />
                 <Route path="/registro" element={<RegistroUsuairo />} />
                 <Route path="/inicio/addConfig" element={<AddConfig />} />
                 <Route path="/inicio/showConfig" element={<ShowConfig />} />
