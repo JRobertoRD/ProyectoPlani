@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import React,{ useEffect, useRef, useState } from "react";
 
 import { IFile } from '../../models/IFile';
 import { MemPoolController } from "../../services/MemPoolController";
@@ -101,7 +101,7 @@ export function MemPool() {
         }
     }
 
-    function downloadMavise() {
+    async function downloadMavise() {
         var zipDependicie = require('jszip');
         var saveAs = require('file-saver')
         var zip = new zipDependicie();
@@ -113,6 +113,7 @@ export function MemPool() {
         zip.generateAsync({type: "blob"}).then(content => {
             saveAs(content, NAME_COMPRESSED + '.' + EXTENSION_COMPRESSED);
         });
+        fileListMasive.current = null;
     }
 
     async function deleteMavise() {
@@ -120,8 +121,9 @@ export function MemPool() {
         alerta.alertwaiting();
         const response = await api.deleteMasiveFromMemPool(fileListMasive.current);
         if (response) {
-            alerta.alert('Exitoso', 'Archivos Eliminados', 'success', 3000);
+            await alerta.alert('Exitoso', 'Archivos Eliminados', 'success', 3000);
             setDisable(true);
+            fileListMasive.current = null;
             navigate("/inicio/mempool")
         } else {
             alerta.alert('Error!', 'Intente nuevamente!!', 'error', 3000)
