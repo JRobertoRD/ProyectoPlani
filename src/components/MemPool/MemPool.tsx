@@ -115,7 +115,6 @@ export function MemPool() {
         });
         fileListMasive.current = null;
     }
-
     async function deleteMavise() {
         const api = new MemPoolController();
         alerta.alertwaiting();

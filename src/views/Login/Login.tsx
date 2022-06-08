@@ -59,7 +59,7 @@ export function Login() {
             navigate("/inicio");
           }
         });
-      e.preventDefault();
+      //e.preventDefault();
       alerta.alertFailLogin();
    
     }else{
