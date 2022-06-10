@@ -12,9 +12,6 @@ import { Alertas } from "../../assets/Alertas/alertas";
 import { AUTENTICAR_USER } from "../../assets/API/ApiLinks";
 
 
-
-//44320
-
 const alerta = new Alertas();
 
 export function Login() {
@@ -59,7 +56,7 @@ export function Login() {
             navigate("/inicio");
           }
         });
-      //e.preventDefault();
+      e.preventDefault();
       alerta.alertFailLogin();
    
     }else{
@@ -138,7 +135,7 @@ export function Login() {
           </div>
         </div>
         <div className="d-grid gap-2">
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" >
             Sign In
           </button>
         </div>
