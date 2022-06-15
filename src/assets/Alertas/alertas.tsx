@@ -55,6 +55,7 @@ export class Alertas {
             allowOutsideClick: false,
             allowEscapeKey: false,
             showConfirmButton: false,
+            timer: 9000,
             didOpen: () => {
                 Swal.showLoading()
             },

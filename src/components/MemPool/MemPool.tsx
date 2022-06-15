@@ -28,6 +28,10 @@ export function MemPool() {
     const [enable, setDisable] = useState(true);
 
     useEffect(() => {
+        if (state.listMemPool.length == 0) {
+            alerta.alertwaiting();
+        }
+        
         if (session.getData('userName') != null) {
             getMemPool();
         } else {
