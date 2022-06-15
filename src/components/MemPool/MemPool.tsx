@@ -9,6 +9,7 @@ import { SessionStorage } from "../../assets/SessionStorage/sessionStorage";
 import { NAME_COMPRESSED, EXTENSION_COMPRESSED } from "../../assets/Download/Download"
 
 
+
 const alerta = new Alertas();
 const session = new SessionStorage();
 export interface State {
@@ -83,13 +84,16 @@ export function MemPool() {
             };
             fileListMasive.current.push(file);
         } else {
-            filteredFileListMasive(fileListMasive.current, e.target.name.split('.')[0]);
+            filteredFileListMasive(fileListMasive.current, e.target.name.split('*')[0]);
         }
         enableButtons(fileListMasive.current);
     };
 
     function filteredFileListMasive(fileList: IFile[], id: string) {
-        const fileListFiltered = fileList.filter(file => file._id !== id);
+        const fileListFiltered = fileList.filter((item) => {
+            return item._id !== id
+        } );
+        //const fileListFiltered = fileList.splice()
         fileListMasive.current = fileListFiltered;
     }
 
@@ -113,7 +117,7 @@ export function MemPool() {
         zip.generateAsync({type: "blob"}).then(content => {
             saveAs(content, NAME_COMPRESSED + '.' + EXTENSION_COMPRESSED);
         });
-        fileListMasive.current = null;
+        //fileListMasive.current = null;
     }
     async function deleteMavise() {
         const api = new MemPoolController();
@@ -134,7 +138,7 @@ export function MemPool() {
         <CardMemPool>
             <div className="container">
                 <a href="/inicio/mempool/add">
-                    <button type="button" className="btn btn-success">Agregar</button>
+                    <button type="button" className="btn btn-success">Add</button>
                 </a>
                 <button type="button" hidden={enable} className="btn btn-danger" onClick={deleteMavise}>Delete Files</button>
                 <button type="button" hidden={enable} className="btn btn-info" onClick={downloadMavise}>Download Files</button>
