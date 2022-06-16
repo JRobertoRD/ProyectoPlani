@@ -28,7 +28,7 @@ export function MemPool() {
     const [enable, setDisable] = useState(true);
 
     useEffect(() => {
-        if (state.listMemPool.length == 0) {
+        if (state.listMemPool.length === 0) {
             alerta.alertwaiting();
         }
         
@@ -102,7 +102,7 @@ export function MemPool() {
     }
 
     function enableButtons(fileList: IFile[]) {
-        if (fileList.length > 0) {
+        if (fileList.length > 1) {
             setDisable(false);
         } else {
             setDisable(true);
@@ -130,7 +130,7 @@ export function MemPool() {
         if (response) {
             await alerta.alert('Exitoso', 'Archivos Eliminados', 'success', 3000);
             setDisable(true);
-            fileListMasive.current = null;
+            fileListMasive.current = new Array<IFile>();
             navigate("/inicio/mempool")
         } else {
             alerta.alert('Error!', 'Intente nuevamente!!', 'error', 3000)
