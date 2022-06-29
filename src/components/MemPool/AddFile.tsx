@@ -27,9 +27,6 @@ export function AddFile() {
     const [state, setState] = useState<State>();
 
     useEffect(() => {
-        if (session.getData('userName') == null) {
-            navigate("/Login")
-        }
     }, [state]);
 
     const onChange = (e) => {

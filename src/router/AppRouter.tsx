@@ -27,8 +27,8 @@ export function AppRouter() {
                 <Route path="/registro" element={<RegistroUsuairo />} />
                 <Route path="/inicio/addConfig" element={<AddConfig />} />
                 <Route path="/inicio/showConfig" element={<ShowConfig />} />
-                <Route path="/inicio/mempool" element={<MemPool />} />
-                <Route path="/inicio/mempool/add" element={<AddFile />} />
+                <Route path="/inicio/mempool" element={ user == null ? (<Navigate to="/Login"/>): (<MemPool />) } />
+                <Route path="/inicio/mempool/add" element={ user == null ? (<Navigate to="/Login"/>): (<AddFile />) } />
                 
 
                 <Route path="*" element={<Navigate to={"/Login"} />} />

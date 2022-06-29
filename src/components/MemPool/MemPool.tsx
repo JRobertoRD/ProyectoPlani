@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React,{ useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { IFile } from '../../models/IFile';
 import { MemPoolController } from "../../services/MemPoolController";
@@ -7,6 +7,7 @@ import { CardMemPool } from "../../views/authCard/CardMemPool";
 import { Alertas } from "../../assets/Alertas/alertas";
 import { SessionStorage } from "../../assets/SessionStorage/sessionStorage";
 import { NAME_COMPRESSED, EXTENSION_COMPRESSED } from "../../assets/Download/Download"
+import { MinedController } from "../../services/MinedController";
 
 
 
@@ -31,12 +32,7 @@ export function MemPool() {
         if (state.listMemPool.length === 0) {
             alerta.alertwaiting();
         }
-        
-        if (session.getData('userName') != null) {
-            getMemPool();
-        } else {
-            navigate("/Login")
-        }
+        getMemPool();
     }, [state]);
 
     async function getMemPool() {
@@ -61,10 +57,10 @@ export function MemPool() {
     async function downloadFile(base64: string, name: string, extension: string) {
         var fileDownload = require('js-file-download');
         let blob = convertStringToBlob(base64.split(",")[1], extension)
-        fileDownload(blob, name+'.'+extension);
+        fileDownload(blob, name + '.' + extension);
     }
 
-    function convertStringToBlob(content:string, extension:string){
+    function convertStringToBlob(content: string, extension: string) {
         const byteString = window.atob(content);
         const arrayBuffer = new ArrayBuffer(byteString.length);
         const int8Array = new Uint8Array(arrayBuffer);
@@ -96,7 +92,7 @@ export function MemPool() {
     function filteredFileListMasive(fileList: IFile[], id: string) {
         const fileListFiltered = fileList.filter((item) => {
             return item._id !== id
-        } );
+        });
         //const fileListFiltered = fileList.splice()
         fileListMasive.current = fileListFiltered;
     }
@@ -115,10 +111,10 @@ export function MemPool() {
         var zip = new zipDependicie();
         for (let fileItem of fileListMasive.current) {
             console.log(fileItem);
-            let file = new File( [convertStringToBlob(fileItem.base64.split(',')[1], fileItem.extension)], fileItem.name, null);
+            let file = new File([convertStringToBlob(fileItem.base64.split(',')[1], fileItem.extension)], fileItem.name, null);
             zip.file(fileItem.name + '.' + fileItem.extension, file);
         }
-        zip.generateAsync({type: "blob"}).then(content => {
+        zip.generateAsync({ type: "blob" }).then(content => {
             saveAs(content, NAME_COMPRESSED + '.' + EXTENSION_COMPRESSED);
         });
         //fileListMasive.current = null;
@@ -128,9 +124,21 @@ export function MemPool() {
         alerta.alertwaiting();
         const response = await api.deleteMasiveFromMemPool(fileListMasive.current);
         if (response) {
-            await alerta.alert('Exitoso', 'Archivos Eliminados', 'success', 3000);
+            alerta.alert('Exitoso', 'Archivos Eliminados', 'success', 3000);
             setDisable(true);
             fileListMasive.current = new Array<IFile>();
+            navigate("/inicio/mempool")
+        } else {
+            alerta.alert('Error!', 'Intente nuevamente!!', 'error', 3000)
+        }
+    }
+
+    async function mineFiles() {
+        const api = new MinedController();
+        alerta.alertwaitingM('Minando archivos...', 'Espere por favor!');
+        const response = await api.mineFiles();
+        if (response.data.split(',')[0]) {
+            alerta.alert('Exitoso', 'Se minarón: ' + response.data.split(',')[1] + ' archivos' , 'success', 3000);
             navigate("/inicio/mempool")
         } else {
             alerta.alert('Error!', 'Intente nuevamente!!', 'error', 3000)
@@ -143,6 +151,9 @@ export function MemPool() {
             <div className="container">
                 <a href="/inicio/mempool/add">
                     <button type="button" className="btn btn-success">Add</button>
+                </a>
+                <a onClick={() => { mineFiles() }} title="Minar" className="btn btn-warning">
+                    <img src="https://img.icons8.com/external-mixed-line-solid-yogi-aprelliyanto/28/000000/external-pickaxe-construction-mixed-line-solid-yogi-aprelliyanto.png" />
                 </a>
                 <button type="button" hidden={enable} className="btn btn-danger" onClick={deleteMavise}>Delete Files</button>
                 <button type="button" hidden={enable} className="btn btn-info" onClick={downloadMavise}>Download Files</button>

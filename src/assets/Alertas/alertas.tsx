@@ -63,6 +63,22 @@ export class Alertas {
 
 
     }
+    public alertwaitingM(title: string, html: string) {
+
+        Swal.fire({
+            title: title,
+            html: html,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            timer: 9000,
+            didOpen: () => {
+                Swal.showLoading()
+            },
+        });
+
+
+    }
     public alertFailServer() {
 
         Swal.fire({
