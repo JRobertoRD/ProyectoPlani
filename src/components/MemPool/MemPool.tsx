@@ -36,7 +36,7 @@ export function MemPool() {
 
     async function getMemPool() {
         const api = new MemPoolController();
-        alerta.alertwaiting();
+        alerta.alertwaitingPer('Buscando archivos de: ' + session.getData("userName"));
         const response = (await api.getMemPoolFilter(session.getData("userName"))).data
         setistMemPool(response)
         alerta.closeSwal();
@@ -49,7 +49,7 @@ export function MemPool() {
         if (response) {
             alerta.alert('Exitoso', 'Archivos Eliminados', 'success', 3000);
             setDisable(true);
-            navigate("/inicio/mempool")
+            getMemPool()
         } else {
             alerta.alert('Error!', 'Intente nuevamente!!', 'error', 3000)
         }
@@ -128,7 +128,7 @@ export function MemPool() {
             alerta.alert('Exitoso', 'Archivos Eliminados', 'success', 3000);
             setDisable(true);
             fileListMasive.current = new Array<IFile>();
-            navigate("/inicio/mempool")
+            getMemPool()
         } else {
             alerta.alert('Error!', 'Intente nuevamente!!', 'error', 3000)
         }
@@ -141,7 +141,7 @@ export function MemPool() {
         //alerta.alertwaitingM('Minando archivos...', 'Espere por favor!');
         if (response.data.split(',')[0]) {
             alerta.alert('Exitoso', 'Se minó ' + response.data.split(',')[1] + ' archivo(s)', 'success', 2000);
-            navigate("/inicio/mempool")
+            getMemPool()
         } else {
             alerta.alert('Error!', 'Intente nuevamente!!', 'error', 2000)
         }

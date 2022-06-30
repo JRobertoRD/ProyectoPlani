@@ -63,6 +63,22 @@ export class Alertas {
 
     }
 
+    public alertwaitingPer(body: string) {
+
+        Swal.fire({
+            title: 'Espere por favor!',
+            html: body,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading()
+            },
+        });
+
+
+    }
+
     public closeSwal(){
         Swal.close();
     }
