@@ -22,23 +22,24 @@ export function MemPool() {
     let fileListMasive = useRef(new Array<IFile>());
     const navigate = useNavigate();
 
-    const [state, setState] = useState<State>({
-        listMemPool: []
-    });
+    const [listMemPool, setistMemPool] = useState([]);
 
     const [enable, setDisable] = useState(true);
 
     useEffect(() => {
-        if (state.listMemPool.length === 0) {
+        /*
+        if (state.listMemPool.length == 0) {
             alerta.alertwaiting();
-        }
+        }*/
         getMemPool();
-    }, [state]);
+    },[]);
 
     async function getMemPool() {
         const api = new MemPoolController();
+        alerta.alertwaiting();
         const response = (await api.getMemPoolFilter(session.getData("userName"))).data
-        setState({ listMemPool: response });
+        setistMemPool(response)
+        alerta.closeSwal();
     };
 
     async function deleteFile(id: string) {
@@ -46,7 +47,7 @@ export function MemPool() {
         alerta.alertwaiting();
         const response = await api.deleteFromMemPool(id);
         if (response) {
-            alerta.alert('Exitoso', 'Archivos Gardados', 'success', 3000);
+            alerta.alert('Exitoso', 'Archivos Eliminados', 'success', 3000);
             setDisable(true);
             navigate("/inicio/mempool")
         } else {
@@ -136,12 +137,13 @@ export function MemPool() {
     async function mineFiles() {
         const api = new MinedController();
         alerta.alertwaitingM('Minando archivos...', 'Espere por favor!');
-        const response = await api.mineFiles();
+        const response = await api.mineFiles(session.getData("userName"));
+        //alerta.alertwaitingM('Minando archivos...', 'Espere por favor!');
         if (response.data.split(',')[0]) {
-            alerta.alert('Exitoso', 'Se minarón: ' + response.data.split(',')[1] + ' archivos' , 'success', 3000);
+            alerta.alert('Exitoso', 'Se minó ' + response.data.split(',')[1] + ' archivo(s)', 'success', 2000);
             navigate("/inicio/mempool")
         } else {
-            alerta.alert('Error!', 'Intente nuevamente!!', 'error', 3000)
+            alerta.alert('Error!', 'Intente nuevamente!!', 'error', 2000)
         }
     }
 
@@ -150,18 +152,20 @@ export function MemPool() {
         <CardMemPool>
             <div className="container">
                 <a href="/inicio/mempool/add">
-                    <button type="button" className="btn btn-success">Add</button>
+                    <button type="button" className="btn btn-success">
+                        <img src="https://img.icons8.com/material/24/000000/plus-math--v2.png" />
+                    </button>
                 </a>
-                <a onClick={() => { mineFiles() }} title="Minar" className="btn btn-warning">
-                    <img src="https://img.icons8.com/external-mixed-line-solid-yogi-aprelliyanto/28/000000/external-pickaxe-construction-mixed-line-solid-yogi-aprelliyanto.png" />
-                </a>
+                {listMemPool.length !== 0 ? (
+                    <a onClick={() => { mineFiles() }} title="Mine" className="btn btn-warning">
+                        <img src="https://img.icons8.com/external-mixed-line-solid-yogi-aprelliyanto/24/000000/external-pickaxe-construction-mixed-line-solid-yogi-aprelliyanto.png" />
+                    </a>) : (<br></br>)}
                 <button type="button" hidden={enable} className="btn btn-danger" onClick={deleteMavise}>Delete Files</button>
                 <button type="button" hidden={enable} className="btn btn-info" onClick={downloadMavise}>Download Files</button>
                 <table className="table">
                     <thead>
                         <tr>
                             <th scope="col">Masive</th>
-                            <th scope="col">Id</th>
                             <th scope="col">Owner</th>
                             <th scope="col">Name</th>
                             <th scope="col">Extension</th>
@@ -171,25 +175,24 @@ export function MemPool() {
                         </tr>
                     </thead>
                     <tbody>
-                        {state.listMemPool.map((item: any) => (
+                        {listMemPool.map((item: any) => (
                             <tr key={item._Id}>
                                 <td>
                                     <div className="form-check form-switch">
                                         <input className="form-check-input" name={item._Id + "*" + item.name + "*" + item.extension + "*" + item.base64} itemID={item._Id} onChangeCapture={masiveActionsOnChange} type="checkbox" id="flexSwitchCheckDefault" />
                                     </div>
                                 </td>
-                                <td>{item._Id}</td>
                                 <td>{item.owner}</td>
                                 <td>{item.name}</td>
                                 <td>{item.extension}</td>
                                 <td>{item.create}</td>
                                 <td>{item.size}</td>
                                 <td>
-                                    <button type="submit" className="btn btn-danger" onClick={() => { deleteFile(item._Id); }}>
-                                        Eliminar
+                                    <button type="submit" className="btn btn-danger" title="Delete" onClick={() => { deleteFile(item._Id); }}>
+                                        <img src="https://img.icons8.com/material/24/000000/delete-forever--v1.png" />
                                     </button>
-                                    <button type="submit" className="btn btn-info" onClick={() => { downloadFile(item.base64, item.name, item.extension); }}>
-                                        Descargar
+                                    <button type="submit" className="btn btn-info" title="Download" onClick={() => { downloadFile(item.base64, item.name, item.extension); }}>
+                                        <img src="https://img.icons8.com/material/24/000000/downloading-updates--v1.png" />
                                     </button>
                                 </td>
                             </tr>

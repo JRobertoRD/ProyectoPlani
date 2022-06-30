@@ -55,7 +55,6 @@ export class Alertas {
             allowOutsideClick: false,
             allowEscapeKey: false,
             showConfirmButton: false,
-            timer: 9000,
             didOpen: () => {
                 Swal.showLoading()
             },
@@ -63,6 +62,11 @@ export class Alertas {
 
 
     }
+
+    public closeSwal(){
+        Swal.close();
+    }
+
     public alertwaitingM(title: string, html: string) {
 
         Swal.fire({
@@ -71,13 +75,11 @@ export class Alertas {
             allowOutsideClick: false,
             allowEscapeKey: false,
             showConfirmButton: false,
-            timer: 9000,
             didOpen: () => {
                 Swal.showLoading()
+                Swal.increaseTimer(1000)
             },
         });
-
-
     }
     public alertFailServer() {
 
