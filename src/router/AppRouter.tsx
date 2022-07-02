@@ -6,6 +6,8 @@ import { AddConfig } from '../views/Config/AddConfig';
 import { ShowConfig } from "../views/Config/ShowConfig";
 import { MemPool } from "../components/MemPool/MemPool";
 import { AddFile } from "../components/MemPool/AddFile";
+import { Blocks } from '../components/Block/Blocks';
+import { BlockDetails } from '../components/Block/BlockDetails';
 
 
 export function AppRouter() {
@@ -29,7 +31,8 @@ export function AppRouter() {
                 <Route path="/inicio/showConfig" element={<ShowConfig />} />
                 <Route path="/inicio/mempool" element={ user == null ? (<Navigate to="/Login"/>): (<MemPool />) } />
                 <Route path="/inicio/mempool/add" element={ user == null ? (<Navigate to="/Login"/>): (<AddFile />) } />
-                
+                <Route path="/inicio/blocks" element={ user == null ? (<Navigate to="/Login"/>): (<Blocks />) } />
+                <Route path="/inicio/block/:id" element={ user == null ? (<Navigate to="/Login"/>): (<BlockDetails />) } />
 
                 <Route path="*" element={<Navigate to={"/Login"} />} />
             </Routes>

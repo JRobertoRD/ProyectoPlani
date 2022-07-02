@@ -1,11 +1,9 @@
 import axios from "axios";
 
-
-import { Alertas } from "../assets/Alertas/alertas";
 import { GET_MEMPOOL, ADD_MEMPOOL, DELETE_MEMPOOL, GET_FILE_MEMPOOL } from '../assets/API/ApiLinks'
 import { IFile } from "../models/IFile";
 
-const alerta = new Alertas();
+
 export class MemPoolController {
     public async getMemPool() {
         return await axios.get(GET_MEMPOOL);

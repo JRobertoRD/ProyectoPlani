@@ -7,12 +7,12 @@ import { Alertas } from "../../assets/Alertas/alertas";
 import { MemPoolController } from "../../services/MemPoolController";
 import { SessionStorage } from "../../assets/SessionStorage/sessionStorage"
 import { DateFormat } from "../../assets/Date/DateFormat"
-import { Validations } from "../../assets/File/Validations"
+import { Operations } from "../../assets/File/Operations"
 
 const alerta = new Alertas();
 const session = new SessionStorage();
 const date = new DateFormat();
-const validations = new Validations();
+const operations = new Operations();
 
 export interface State {
     modalId: string;
@@ -33,7 +33,7 @@ export function AddFile() {
         let invalidExtension = false;
         fileList = new Array<IFile>();
         Array.from(e.target.files).forEach(file => {
-            if (validations.validateExtension(file['name'].split(".")[1])) {
+            if (operations.validateExtension(file['name'].split(".")[1])) {
                 let fileNew: IFile = {
                     _id: null,
                     owner: session.getData("userName"),
@@ -50,7 +50,7 @@ export function AddFile() {
             }
         });
         if(invalidExtension){
-            alerta.alertBotton('Error!', 'Extensiones de documento permitidas:\n' + validations.getExtensionsValid(), 'error');
+            alerta.alertBotton('Error!', 'Extensiones de documento permitidas:\n' + operations.getExtensionsValid(), 'error');
         }
     };
 
@@ -58,7 +58,7 @@ export function AddFile() {
         var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function () {
-            fileNew.base64 = reader.result.toString();
+            fileNew.base64 = reader.result.toString().split(',')[1];
         };
     }
 

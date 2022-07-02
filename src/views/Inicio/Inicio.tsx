@@ -8,7 +8,7 @@ import logo from '../../assets/img/logo.svg';
 function Inicio() {
 
   let userName = sessionStorage.getItem('userName');
-  console.log(`Hola, mi nombre es ${userName}`);
+  //console.log(`Hola, mi nombre es ${userName}`);
 
   return (
     <AuthCard>

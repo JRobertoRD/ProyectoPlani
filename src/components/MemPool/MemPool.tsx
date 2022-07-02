@@ -5,14 +5,15 @@ import { IFile } from '../../models/IFile';
 import { MemPoolController } from "../../services/MemPoolController";
 import { CardMemPool } from "../../views/authCard/CardMemPool";
 import { Alertas } from "../../assets/Alertas/alertas";
+import { Operations } from "../../assets/File/Operations";
 import { SessionStorage } from "../../assets/SessionStorage/sessionStorage";
-import { NAME_COMPRESSED, EXTENSION_COMPRESSED } from "../../assets/Download/Download"
 import { MinedController } from "../../services/MinedController";
 
 
 
 const alerta = new Alertas();
 const session = new SessionStorage();
+const operations = new Operations();
 export interface State {
     listMemPool: IFile[],
 }
@@ -56,39 +57,26 @@ export function MemPool() {
     }
 
     async function downloadFile(base64: string, name: string, extension: string) {
-        var fileDownload = require('js-file-download');
-        let blob = convertStringToBlob(base64.split(",")[1], extension)
-        fileDownload(blob, name + '.' + extension);
+        operations.downloadFile(base64, name, extension)
     }
 
-    function convertStringToBlob(content: string, extension: string) {
-        const byteString = window.atob(content);
-        const arrayBuffer = new ArrayBuffer(byteString.length);
-        const int8Array = new Uint8Array(arrayBuffer);
-        for (let i = 0; i < byteString.length; i++) {
-            int8Array[i] = byteString.charCodeAt(i);
-        }
-        return new Blob([int8Array], { type: extension });
-    }
-
-    const masiveActionsOnChange = (e) => {
-        if (e.target.checked) {
-            let datos = e.target.name.split('*');
+    const handleOnChange = (event: any, fileItem: any) => {
+        if (event.target.checked) {
             let file: IFile = {
-                _id: datos[0],
+                _id: fileItem._Id,
                 owner: '',
-                name: datos[1],
-                extension: datos[2],
+                name: fileItem.name,
+                extension: fileItem.extension,
                 create: '',
                 size: 0,
-                base64: datos[3]
+                base64: fileItem.base64
             };
             fileListMasive.current.push(file);
         } else {
-            filteredFileListMasive(fileListMasive.current, e.target.name.split('*')[0]);
+            filteredFileListMasive(fileListMasive.current,fileItem._Id);
         }
         enableButtons(fileListMasive.current);
-    };
+    }
 
     function filteredFileListMasive(fileList: IFile[], id: string) {
         const fileListFiltered = fileList.filter((item) => {
@@ -107,17 +95,7 @@ export function MemPool() {
     }
 
     async function downloadMavise() {
-        var zipDependicie = require('jszip');
-        var saveAs = require('file-saver')
-        var zip = new zipDependicie();
-        for (let fileItem of fileListMasive.current) {
-            console.log(fileItem);
-            let file = new File([convertStringToBlob(fileItem.base64.split(',')[1], fileItem.extension)], fileItem.name, null);
-            zip.file(fileItem.name + '.' + fileItem.extension, file);
-        }
-        zip.generateAsync({ type: "blob" }).then(content => {
-            saveAs(content, NAME_COMPRESSED + '.' + EXTENSION_COMPRESSED);
-        });
+        operations.downloadMavise(fileListMasive.current);
         //fileListMasive.current = null;
     }
     async function deleteMavise() {
@@ -138,7 +116,6 @@ export function MemPool() {
         const api = new MinedController();
         alerta.alertwaitingM('Minando archivos...', 'Espere por favor!');
         const response = await api.mineFiles(session.getData("userName"));
-        //alerta.alertwaitingM('Minando archivos...', 'Espere por favor!');
         if (response.data.split(',')[0]) {
             alerta.alert('Exitoso', 'Se minó ' + response.data.split(',')[1] + ' archivo(s)', 'success', 2000);
             getMemPool()
@@ -179,7 +156,7 @@ export function MemPool() {
                             <tr key={item._Id}>
                                 <td>
                                     <div className="form-check form-switch">
-                                        <input className="form-check-input" name={item._Id + "*" + item.name + "*" + item.extension + "*" + item.base64} itemID={item._Id} onChangeCapture={masiveActionsOnChange} type="checkbox" id="flexSwitchCheckDefault" />
+                                        <input className="form-check-input" name={item._Id + "*" + item.name + "*" + item.extension + "*" + item.base64} itemID={item._Id} onChange={($event) => handleOnChange($event, item)} type="checkbox" id="flexSwitchCheckDefault" />
                                     </div>
                                 </td>
                                 <td>{item.owner}</td>

@@ -28,6 +28,9 @@ export function NavBar(props:Props){
                     <li className="nav-item">
                         <a className="nav-link" href="/inicio/mempool">MemPool</a>
                     </li>
+                    <li className="nav-item">
+                        <a className="nav-link" href="/inicio/blocks">Bloques</a>
+                    </li>
                 </ul>
             </div>
             <span className="navbar-text">
