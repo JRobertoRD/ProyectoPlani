@@ -1,7 +1,7 @@
 export class SessionStorage {
 
-  saveData(name:string, value:any) {
-    sessionStorage.setItem(name, value);
+  async saveData(name:string, value:any) {
+    await sessionStorage.setItem(name, value);
   }
 
   getData(name:string){

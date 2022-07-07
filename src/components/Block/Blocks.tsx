@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
+
+import { useEffect, useState } from "react";
 
 
 import { Alertas } from "../../assets/Alertas/alertas";
@@ -13,8 +13,6 @@ const session = new SessionStorage();
 export function Blocks() {
 
     const [listBlocks, setListBlocks] = useState([]);
-
-    //const [enable, setDisable] = useState(true);
 
     useEffect(() => {
         getBlocks();

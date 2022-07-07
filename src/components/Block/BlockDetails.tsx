@@ -1,10 +1,8 @@
-import { useNavigate, useParams } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
-import { Table } from 'react-bootstrap'
+import {useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 
 
 import { Alertas } from "../../assets/Alertas/alertas";
-import { SessionStorage } from "../../assets/SessionStorage/sessionStorage";
 import { Operations } from "../../assets/File/Operations";
 import { BlockController } from "../../services/BlockController";
 import { CardBlock } from "../../views/authCard/CardBlock";
@@ -39,29 +37,19 @@ export function BlockDetails() {
         setPrueba(response.prueba)
         setHashPrevio(response.hashPrevio)
         setHash(response.hash);
-        setDocuemnts(response.documentos);
+        setDocuemnts(response.documentosLista);
         alerta.closeSwal();
     };
 
-    function downloadFile(base64: string, name: string, extension: string) {
-        operations.downloadFile(base64, name, extension);
+    function downloadFile(file: IFile) {
+        operations.downloadFile(file.base64, file.name, file.extension);
     }
 
-    const handleOnChange = (event: any, fileString: string) => {
-        let datos = fileString.split('$');
+    const handleOnChange = (event: any, file: IFile) => {
         if (event.target.checked) {
-            let file: IFile = {
-                _id: datos[0],
-                owner: '',
-                name: datos[2],
-                extension: datos[3],
-                create: '',
-                size: 0,
-                base64: datos[5]
-            };
             fileListMasive.current.push(file);
         } else {
-            filteredFileListMasive(fileListMasive.current, datos[0]);
+            filteredFileListMasive(fileListMasive.current, file._id);
         }
         enableButtons(fileListMasive.current);
     }
@@ -70,7 +58,6 @@ export function BlockDetails() {
         const fileListFiltered = fileList.filter((item) => {
             return item._id !== id
         });
-        //const fileListFiltered = fileList.splice()
         fileListMasive.current = fileListFiltered;
     }
 
@@ -148,18 +135,18 @@ export function BlockDetails() {
                             </thead>
                             <tbody>
                                 {documents.map((item: any) => (
-                                    <tr key={item.split('$')[0]}>
+                                    <tr key={item._id}>
                                         <td>
                                             <div className="form-check form-switch">
                                                 <input className="form-check-input" onChange={($event) => handleOnChange($event, item)} type="checkbox" id="flexSwitchCheckDefault" />
                                             </div>
                                         </td>
-                                        <td>{item.split('$')[1]}</td>
-                                        <td>{item.split('$')[2]}</td>
-                                        <td>{item.split('$')[3]}</td>
-                                        <td>{item.split('$')[4]}</td>
+                                        <td>{item.owner}</td>
+                                        <td>{item.name}</td>
+                                        <td>{item.extension}</td>
+                                        <td>{item.create}</td>
                                         <td>
-                                            <button type="submit" className="btn btn-info" title="Download" onClick={() => { downloadFile(item.split('$')[5], item.split('$')[2], item.split('$')[3]); }}>
+                                            <button type="submit" className="btn btn-info" title="Download" onClick={() => { downloadFile(item); }}>
                                                 <img src="https://img.icons8.com/material/24/000000/downloading-updates--v1.png" />
                                             </button>
                                         </td>

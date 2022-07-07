@@ -82,7 +82,6 @@ export function AddFile() {
         } else {
             alerta.alert('Error!', 'Seleccione archivo(s) primero', 'error', 3000);
         }
-        //reload()
     }
 
     return (

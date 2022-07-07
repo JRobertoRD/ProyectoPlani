@@ -29,7 +29,7 @@ export class MemPoolController {
     }
 
     public async deleteMasiveFromMemPool(listFiles: IFile[]){
-        console.log(listFiles);
+        //console.log(listFiles);
         for(let file of listFiles){ 
             await this.deleteFromMemPool(file._id)
         }

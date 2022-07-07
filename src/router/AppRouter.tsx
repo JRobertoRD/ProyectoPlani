@@ -8,13 +8,20 @@ import { MemPool } from "../components/MemPool/MemPool";
 import { AddFile } from "../components/MemPool/AddFile";
 import { Blocks } from '../components/Block/Blocks';
 import { BlockDetails } from '../components/Block/BlockDetails';
+import { useEffect, useState } from 'react';
 
+export interface State {
+    user: string,
+}
 
 export function AppRouter() {
     
-
-    let user = sessionStorage.getItem('userName');
-
+    const [user, setUser] = useState(String);
+    useEffect(() => {
+        setUser(sessionStorage.getItem('userName'));
+    },[]);
+    //let user = sessionStorage.getItem('userName');
+    console.log(user)
 
 
 

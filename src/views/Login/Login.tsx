@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 
 import logo from '../../assets/img/logo.svg';
@@ -6,14 +6,20 @@ import accountIcon from '../../assets/icons/user.png';
 import passwordIcon from '../../assets/icons/password.png';
 import {Link, useNavigate} from 'react-router-dom'
 import { Id, IUsuario } from "../../models/IUsuario";
-import { useForm } from "react-hook-form";
+//import { useForm } from "react-hook-form";
 import { CardUsuario } from '../authCard/CardUsuario';
 import { Alertas } from "../../assets/Alertas/alertas";
-import { AUTENTICAR_USER } from "../../assets/API/ApiLinks";
+//import { AUTENTICAR_USER } from "../../assets/API/ApiLinks";
+import { autenticarUsuario } from "../../services/UsuarioController";
+
+import { SessionStorage } from "../../assets/SessionStorage/sessionStorage";
 
 
 const alerta = new Alertas();
-
+const session = new SessionStorage();
+export interface State {
+  userResponse: IUsuario,
+}
 export function Login() {
   
 
@@ -26,19 +32,33 @@ export function Login() {
     increment: 0,
     creationTime: ''
   }
-  const [user, setUser] = useState<IUsuario>({
+  const [user, setUser] = useState({
     id: Id,
     nombre: "",
     contrasenia: "",
   });
+  const [userResponse, setUserResponse] = useState();
 
-  const {handleSubmit }: any = useForm();
+    useEffect(() => {
+    }, []);
+
+  //const {handleSubmit }: any = useForm();
 
 
-  const onSubmit = (e:React.ChangeEvent<HTMLFormElement>) => {
+  const onSubmit = async () => {
     
     if (user.contrasenia !== '' && user.nombre !== '') {
+      const response= (await autenticarUsuario(user)).data;
+      setUserResponse(response)
+      if(userResponse !== ""){
+        await session.saveData('userName', user.nombre);
+        alerta.alertWelcomeUser();
+        navigate("/inicio");
+      }else{
+        alerta.alertFailLogin();
+      }
       //alerta.alertwaiting();
+      /*
       fetch(AUTENTICAR_USER, {
         method: "POST",
         body: JSON.stringify(user),
@@ -56,8 +76,8 @@ export function Login() {
             navigate("/inicio");
           }
         });
-      e.preventDefault();
-      alerta.alertFailLogin();
+        */
+      //e.preventDefault();
    
     }else{
       alerta.alertFailRegistro();
@@ -76,7 +96,7 @@ export function Login() {
     
     <CardUsuario>
       
-      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+      <div>
         <div className="text-center mb-2">
           <img
             className="img-fluid"
@@ -135,7 +155,7 @@ export function Login() {
           </div>
         </div>
         <div className="d-grid gap-2">
-          <button className="btn btn-primary" >
+          <button onClick={onSubmit} className="btn btn-primary" >
             Sign In
           </button>
         </div>
@@ -148,7 +168,7 @@ export function Login() {
           <h6>Don´t have an account</h6>
           <Link to="/registro">Register</Link>
         </div>
-      </form> 
+        </div>
     
     </CardUsuario>
   );

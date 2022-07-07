@@ -39,7 +39,6 @@ export class Operations {
         zip.generateAsync({ type: "blob" }).then(content => {
             saveAs(content, NAME_COMPRESSED + '.' + EXTENSION_COMPRESSED);
         });
-        //fileListMasive.current = null;
     }
 
     convertStringToBlob(content: string, extension: string) {

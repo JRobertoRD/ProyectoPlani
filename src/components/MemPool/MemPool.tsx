@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { IFile } from '../../models/IFile';
 import { MemPoolController } from "../../services/MemPoolController";
@@ -28,10 +28,6 @@ export function MemPool() {
     const [enable, setDisable] = useState(true);
 
     useEffect(() => {
-        /*
-        if (state.listMemPool.length == 0) {
-            alerta.alertwaiting();
-        }*/
         getMemPool();
     },[]);
 
@@ -82,7 +78,6 @@ export function MemPool() {
         const fileListFiltered = fileList.filter((item) => {
             return item._id !== id
         });
-        //const fileListFiltered = fileList.splice()
         fileListMasive.current = fileListFiltered;
     }
 
@@ -96,7 +91,6 @@ export function MemPool() {
 
     async function downloadMavise() {
         operations.downloadMavise(fileListMasive.current);
-        //fileListMasive.current = null;
     }
     async function deleteMavise() {
         const api = new MemPoolController();
